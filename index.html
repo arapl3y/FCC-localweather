@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Local Weather</title>
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="preload">
+    </div>
+    <div class="content">
+
+        <body>
+            <div class="container">
+                <div class="jumbotron">
+                    <div class="row temperature">
+                        <h1 class="currentTemp"></h1>
+                        <button type="button" id="convertTemp" class="btn">/°F</button>
+                    </div>
+                    <h4 class="currentCondition"></h4>
+                    <div id="weatherIcon">
+                        <canvas id="weather-icon" width="96" height="96"></canvas>
+                    </div>
+                    <div id="clock" class="currentTime"></div>
+                    <div id="calender"></div>
+                    <p class="currentLocation"></p>
+                    <footer class="credits">
+                        <p>Powered by:</p>
+                        <ul class="list-inline">
+                            <li><a href="//ipapi.co">ipapi</a></li>
+                            <li><a href="//openweathermap.org/current">openweathermap</a></li>
+                            <li><a href="//darkskyapp.github.io/skycons/">skycons</a></li>
+                            <li><a href="//uigradients.com/">uigradients</a></li>
+                        </ul>
+                    </footer>
+                </div>
+                <!-- /jumbo -->
+            </div>
+            <!-- /container -->
+            <script src="//rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+            <script src="app.js"></script>
+        </body>
+    </div>
+</body>
+
+</html>

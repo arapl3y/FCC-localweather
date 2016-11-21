@@ -1,0 +1,123 @@
+/*BG colors:
+
+clear day: linear-gradient(to bottom, #4CA1AF , #C4E0E5);
+
+clear night:background: linear-gradient(to bottom, #141E30 , #243B55);
+
+
+sunrise: background: linear-gradient(to bottom, #FF512F , #F09819);
+
+sunset: background: linear-gradient(to bottom, #0B486B , #F56217);
+
+http://uigradients.com/
+
+*/
+
+
+/*issue with height, bottom chopping off*/
+
+.content {
+    display: none;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    width: 100%;
+    height: auto;
+    background: linear-gradient(to bottom, #4CA1AF, #C4E0E5);
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Helvetica', sans-serif;
+    color: black !important;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    margin: 0;
+    padding: 0;
+}
+
+.jumbotron {
+    width: 80%;
+    height: auto;
+    text-align: center;
+    margin: 60px auto;
+    background: rgba(255, 255, 255, .3) !important;
+}
+
+.jumbotron .currentTemp {
+    font-size: 5.6em;
+    padding: 10px;
+}
+
+.jumbotron .currentLocation {
+    font-size: 1.8em;
+    padding: 10px;
+}
+
+.jumbotron canvas {
+    padding: 20px;
+}
+
+.currentTime {
+    font-size: 1.6em;
+}
+
+@media screen and (max-width: 400px) {
+    .jumbotron {
+        width: 95%;
+        margin: 20px auto;
+    }
+    .jumbotron .currentTemp {
+        font-size: 4.2em;
+    }
+    .jumbotron .currentCondition {
+        font-size: 1em;
+    }
+    .jumbotron .currentTime {
+        font-size: 1em;
+    }
+    .jumbotron .currentLocation {
+        font-size: 1.2em;
+    }
+    .jumbotron .credits {
+        font-size: 0.8em;
+    }
+}
+
+.temperature {
+    display: inline;
+}
+
+.temperature button {
+    border: 1px solid black;
+    background: inherit;
+}
+
+.credits {
+    font-size: 1em;
+    text-align: center;
+    padding-top: 60px;
+}
+
+.credits p {
+    font-size: 1.2em;
+}
+
+footer ul {
+    list-style-type: none;
+    text-decoration: none;
+    text-align: center;
+    padding: 0;
+}
+
+footer ul a {
+    color: inherit;
+}
+
+footer ul a:hover {
+    color: inherit;
+}
