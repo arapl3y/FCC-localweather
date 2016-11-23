@@ -1,45 +1,52 @@
-//Add functionality to use geolocation if using chrome
-//Chrome 50 geolocation bug
-//Add 5 day forecast
+var app = {};
 
-/*
+app.init = function() {
+    app.celsius = 0;
+    app.fahrenheit = 0;
+    app.showCelsius = true;
+    app.initSkycons();
+    app.showTime();
+    app.getLocation();
+    setInterval(app.showTime, 1000);
 
--Not reading global variables, because part of run function?
-    -cTemp, fTemp, tempSwap, skycons, d, h, m
--Can we make convertTemp function stand alone outside of getWeather()?
--Refactor skycons section
--IP API sometimes bringing up wrong location, Pyrmont -> Auburn etc.
+    //Temperature conversion
+    $('#convertTemp').on("click", app.convertTemp);
+};
 
-*/
+app.convertTemp = function() {
+    if (app.showCelsius === true) {
+        app.showCelsius = false;
+    } else {
+        app.showCelsius = true;
+    }
+    app.render();
+};
 
-// //Preload fade in
-$(document).ready(function() {
-
-    $(".preload").fadeOut(2000, function() {
-        $(".content").fadeIn(1000);
-    });
-
-    //Global time variables
-    var m, h, d;
-
-    //Skycons
-    var skycons = new Skycons({
+app.initSkycons = function() {
+    app.skycons = new Skycons({
         "color": "black"
     });
-    skycons.add("weather-icon", Skycons.CLEAR_DAY);
-    skycons.play();
 
-    //Get Data
-    getIp();
-    showTime();
+    app.skycons.add("weather-icon", Skycons.CLEAR_DAY);
+    app.skycons.play();
+};
 
-    function getIp() {
-        var getIpUrl = "https://ipapi.co/json/";
+//get weather at coordinates
+app.getLocation = function() {
+    //JSON call to get location (lat,lon)
+    //on success => app.getWeather(location)
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            app.getWeather(lat, lon);
 
-        $.getJSON(getIpUrl).then(function(location) {
-            $('.currentLocation').text(location.city + ', ' + location.region + ", " + location.country);
-            //Call weather function after IP located
-            getWeather(location);
+        });
+    } else {
+        $.getJSON("https://ipapi.co/json/").then(function(location) {
+            var lat = location.latitude;
+            var lon = location.longitude;
+            app.getWeather(lat, lon);
 
         }, function error(err) {
             if (error.status.fail) {
@@ -47,105 +54,115 @@ $(document).ready(function() {
             }
         });
     }
+};
 
-    function getWeather(location) {
-        //Assign IP API location data to variables
-        var lat = location.latitude;
-        var lon = location.longitude;
+//get weather at coordinates
+app.getWeather = function(lat, lon) {
+    //JSON call to get weather using lat,lon
+    //on success => display weather
+    var weatherApi = "c1ce9d512a69e69adeb90b4a243590a9";
+    var getWeatherUrl = "https://cors-anywhere.herokuapp.com/" +
+        "http://api.openweathermap.org/data/2.5/weather?lat=" + lat +
+        "&lon=" + lon + "&units=metric&appid=" + weatherApi;
 
-        var weatherApi = "c1ce9d512a69e69adeb90b4a243590a9";
-        var getWeatherUrl = "https://cors-anywhere.herokuapp.com/" +
-            "http://api.openweathermap.org/data/2.5/weather?lat=" + lat +
-            "&lon=" + lon + "&units=metric&appid=" + weatherApi;
+    //Get weather data
+    $.getJSON(getWeatherUrl).then(function(weather) {
+            app.weather = {
+                celsius: weather.main.temp,
+                sunrise: weather.sys.sunrise,
+                sunset: weather.sys.sunset,
+                description: weather.weather[0].description,
+                city: weather.name
+            };
 
-        //Get weather
-        $.getJSON(getWeatherUrl).then(function(weather) {
-                var tempSwap = false;
+            app.render();
+        },
+        function error(err) {
+            console.log("Error");
+        });
+};
 
-                //Set variables for Celsius and Fahrenheit
-                var cTemp = weather.main.temp;
-                var fTemp = (cTemp * (9 / 5)) + 32;
+app.render = function() {
+    var w = app.weather;
 
-                //Set default temp
-                $('.currentTemp').text(Math.round(cTemp) + "°C");
+    //app.fahrenheit = (app.celsius * (9 / 5)) + 32;
+    if (app.showCelsius) {
+        $('.currentTemp').text(Math.round(w.celsius) + "°C").hide().fadeIn();
 
-                //Temperature conversion
-                $('#convertTemp').click(function() {
-                    if (tempSwap === true) {
-                        $('.currentTemp').text(Math.round(cTemp) + "°C").hide().fadeIn();
-                        $('.btn').text("/°F");
-                        tempSwap = false;
-                    } else {
-                        $('.currentTemp').text(Math.round(fTemp * 10) / 10 + "°F").hide().fadeIn();
-                        $('.btn').text("/°C");
-                        tempSwap = true;
-                    }
-                });
+        $('#convertTemp').text("/°F");
+    } else {
+        var fahrenheit = w.celsius * (9 / 5) + 32;
+        var rounded = Math.round(fahrenheit * 10) / 10;
 
-                //Weather descriptions
-                var weatherDesc = weather.weather[0].description;
-
-                $('.currentCondition').text(weatherDesc);
-
-                //Dynamic weather icons
-                if (weatherDesc.indexOf("rain") >= 0) {
-                    skycons.set("weather-icon", Skycons.RAIN);
-                } else if (weatherDesc.indexOf("sunny") >= 0) {
-                    skycons.set("weather-icon", Skycons.CLEAR_DAY);
-                } else if (weatherDesc.indexOf("clear") >= 0) {
-                    skycons.set("weather-icon", Skycons.CLEAR_DAY);
-                } else if (h <= 7 && h > 20) {
-                    skycons.set("weather-icon", Skycons.CLEAR_NIGHT);
-                } else if (weatherDesc.indexOf("cloud") >= 0) {
-                    if (h >= 7 && h < 20) {
-                        skycons.set("weather-icon", Skycons.PARTLY_CLOUDY_DAY);
-                    } else {
-                        skycons.set("weather-icon", Skycons.PARTLY_CLOUDY_NIGHT);
-                    }
-                } else if (weatherDesc.indexOf("thunderstorm") >= 0) {
-                    skycons.set("weather-icon", Skycons.SLEET);
-                } else if (weatherDesc.indexOf("snow") >= 0) {
-                    skycons.set("weather-icon", Skycons.SNOW);
-                }
-            },
-            function error(err) {
-                console.log("Error");
-            });
+        $('.currentTemp').text(rounded + "°F").hide().fadeIn();
+        $('#convertTemp').text("/°C");
     }
 
-    //Day and time
-    function showTime() {
-        //Clock variables
-        var date = new Date();
-        var h = date.getHours();
-        var m = date.getMinutes();
-        var d = date.getDay();
-        var daylist = ["Sunday", "Monday", "Tuesday", "Wednesday ", "Thursday", "Friday", "Saturday"];
-        var session = "AM";
+    //Display location
+    $('.currentLocation').text(w.city);
 
-        if (h > 12) {
-            session = "PM";
-        }
 
-        //Add a 0 before digit to keep consistency
-        h = (h < 10) ? "0" + h : h;
-        m = (m < 10) ? "0" + m : m;
+    //Weather descriptions
 
-        var time = daylist[d] + ", " + h + ":" + m + " " + session;
+    $('.currentCondition').text(w.description);
 
-        $("#clock").text(time);
+    //Dynamic weather icons
 
-        setTimeout(showTime, 1000);
+    var currentTime = new Date().getTime() / 1000;
+    var isDaytime = currentTime > w.sunrise && currentTime < w.sunset;
+    var desc = w.description.toLowerCase();
 
-        //Change background depending on time
-        if (h > 16 && h < 20) {
-            $('body').css("background", "linear-gradient(to bottom, #0B486B, #F56217)");
-        } else if (h >= 20 || h < 5) {
-            $('body').css("background", "linear-gradient(to bottom, #141E30 , #243B55)");
-        } else if (h >= 5 && h < 8) {
-            $('body').css("background", "linear-gradient(to bottom, #FF512F, #F09819)");
-        } else {
-            $('body').css("background", "linear-gradient(to bottom, #4CA1AF, #C4E0E5)");
-        }
+    if (desc.indexOf("rain") >= 0) {
+        app.skycons.set("weather-icon", Skycons.RAIN);
+    } else if (desc.indexOf("sunny") >= 0 && isDaytime) {
+        app.skycons.set("weather-icon", Skycons.CLEAR_DAY);
+    } else if (desc.indexOf("sunny") >= 0 && !isDaytime) {
+        app.skycons.set("weather-icon", Skycons.CLEAR_NIGHT);
+    } else if (desc.indexOf("cloud") >= 0 && isDaytime) {
+        app.skycons.set("weather-icon", Skycons.PARTLY_CLOUDY_DAY);
+    } else if (desc.indexOf("cloud") >= 0 && !isDaytime) {
+        app.skycons.set("weather-icon", Skycons.PARTLY_CLOUDY_NIGHT);
+    } else if (desc.indexOf("thunderstorm") >= 0) {
+        app.skycons.set("weather-icon", Skycons.SLEET);
+    } else if (desc.indexOf("snow") >= 0) {
+        app.skycons.set("weather-icon", Skycons.SNOW);
+    } else {
+        app.skycons.set("weather-icon", Skycons.CLEAR_DAY);
     }
-});
+
+
+};
+
+app.showTime = function() {
+    //Clock variables
+    var date = new Date();
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var d = date.getDay();
+    var daylist = ["Sunday", "Monday", "Tuesday", "Wednesday ", "Thursday", "Friday", "Saturday"];
+    var session = "AM";
+
+    if (h >= 12) {
+        session = "PM";
+    }
+    //Add a 0 before digit to keep consistency
+    h = (h < 10) ? "0" + h : h;
+    m = (m < 10) ? "0" + m : m;
+
+    var time = daylist[d] + ", " + h + ":" + m + " " + session;
+
+    $("#clock").text(time);
+
+    //Change background depending on time
+    if (h > 16 && h < 20) {
+        $('body').css("background", "linear-gradient(to bottom, #0B486B, #F56217)");
+    } else if (h >= 20 || h < 5) {
+        $('body').css("background", "linear-gradient(to bottom, #141E30 , #243B55)");
+    } else if (h >= 5 && h < 8) {
+        $('body').css("background", "linear-gradient(to bottom, #FF512F, #F09819)");
+    } else {
+        $('body').css("background", "linear-gradient(to bottom, #4CA1AF, #C4E0E5)");
+    }
+};
+
+$(document).ready(app.init);

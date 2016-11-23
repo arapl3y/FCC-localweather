@@ -11,42 +11,43 @@
 </head>
 
 <body>
-    <div class="preload">
-    </div>
-    <div class="content">
+    <div class="container">
+        <div class="jumbotron">
 
-        <body>
-            <div class="container">
-                <div class="jumbotron">
-                    <div class="row temperature">
-                        <h1 class="currentTemp"></h1>
-                        <button type="button" id="convertTemp" class="btn">/°F</button>
-                    </div>
-                    <h4 class="currentCondition"></h4>
-                    <div id="weatherIcon">
-                        <canvas id="weather-icon" width="96" height="96"></canvas>
-                    </div>
-                    <div id="clock" class="currentTime"></div>
-                    <div id="calender"></div>
-                    <p class="currentLocation"></p>
-                    <footer class="credits">
-                        <p>Powered by:</p>
-                        <ul class="list-inline">
-                            <li><a href="//ipapi.co">ipapi</a></li>
-                            <li><a href="//openweathermap.org/current">openweathermap</a></li>
-                            <li><a href="//darkskyapp.github.io/skycons/">skycons</a></li>
-                            <li><a href="//uigradients.com/">uigradients</a></li>
-                        </ul>
-                    </footer>
+            <div class="row temperature">
+                <h1 class="currentTemp"></h1>
+                <button type="button" id="convertTemp" class="btn">/°F</button>
+
+                <h4 class="currentCondition"></h4>
+
+                <div id="weatherIcon">
+                    <canvas id="weather-icon" width="96" height="96"></canvas>
                 </div>
-                <!-- /jumbo -->
+
+                <div id="clock" class="currentTime">
+                </div>
+                <div id="calender"></div>
+
+                <p class="currentLocation"></p>
             </div>
-            <!-- /container -->
-            <script src="//rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-            <script src="app.js"></script>
-        </body>
+        </div>
     </div>
+
+
+    <footer class="credits">
+        <p>Powered by:</p>
+        <ul class="list-inline">
+            <li><a href="https://ipapi.co">ipapi</a></li>
+            <li><a href="https://openweathermap.org/current">openweathermap</a></li>
+            <li><a href="https://darkskyapp.github.io/skycons/">skycons</a></li>
+            <li><a href="http://uigradients.com/">uigradients</a></li>
+        </ul>
+    </footer>
+
+
+    <script src="https://rawgithub.com/darkskyapp/skycons/master/skycons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

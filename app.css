@@ -4,7 +4,6 @@ clear day: linear-gradient(to bottom, #4CA1AF , #C4E0E5);
 
 clear night:background: linear-gradient(to bottom, #141E30 , #243B55);
 
-
 sunrise: background: linear-gradient(to bottom, #FF512F , #F09819);
 
 sunset: background: linear-gradient(to bottom, #0B486B , #F56217);
@@ -15,10 +14,6 @@ http://uigradients.com/
 
 
 /*issue with height, bottom chopping off*/
-
-.content {
-    display: none;
-}
 
 html {
     min-height: 100%;
@@ -31,7 +26,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     font-family: 'Helvetica', sans-serif;
-    color: black !important;
+    color: black;
     margin: 0;
 }
 
@@ -45,12 +40,26 @@ h1, h2, h3, h4, h5 {
     height: auto;
     text-align: center;
     margin: 60px auto;
-    background: rgba(255, 255, 255, .3) !important;
+    background: rgba(255, 255, 255, .3);
+}
+
+.temperature {
+    display: inline;
+}
+
+.temperature button {
+    border: 1px solid black;
+    background: inherit;
 }
 
 .jumbotron .currentTemp {
     font-size: 5.6em;
     padding: 10px;
+}
+
+.jumbotron .currentCondition {
+    font-size: 1.4em;
+    padding: 20px 10px 0;
 }
 
 .jumbotron .currentLocation {
@@ -64,6 +73,19 @@ h1, h2, h3, h4, h5 {
 
 .currentTime {
     font-size: 1.6em;
+}
+
+.jumbotron .input-group {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.form-control {
+    border: 1px solid black;
+}
+
+.btn-secondary {
+    height: 34px;
 }
 
 @media screen and (max-width: 400px) {
@@ -86,15 +108,6 @@ h1, h2, h3, h4, h5 {
     .jumbotron .credits {
         font-size: 0.8em;
     }
-}
-
-.temperature {
-    display: inline;
-}
-
-.temperature button {
-    border: 1px solid black;
-    background: inherit;
 }
 
 .credits {
