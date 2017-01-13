@@ -4,7 +4,6 @@ app.init = function() {
 	app.celsius = 0;
 	app.fahrenheit = 0;
 	app.showCelsius = true;
-	app.loader();
 	app.initSkycons();
   app.showTime();
   app.getLocation();
@@ -12,24 +11,6 @@ app.init = function() {
 
   //Temperature conversion
   $('#convertTemp').on("click", app.convertTemp);
-};
-
-app.loader = function() {
-
-	$(window).on("load", function() {
-    if ($("#bar").width(600)) {
-      $(".loader").fadeOut(4000);
-    }
-  });
-
-  var progress = setInterval(function() {
-    var bar = $("#bar");
-    if (bar.width() >= 600) {
-      clearInterval(progress);
-    } else {
-      bar.width(bar.width() + 60);
-    }
-  }, 800);
 };
 
 app.convertTemp = function() {
