@@ -1,10 +1,10 @@
 var app = {};
 
 app.init = function() {
-	app.celsius = 0;
-	app.fahrenheit = 0;
-	app.showCelsius = true;
-	app.initSkycons();
+  app.celsius = 0;
+  app.fahrenheit = 0;
+  app.showCelsius = true;
+  app.initSkycons();
   app.showTime();
   app.getLocation();
   setInterval(app.showTime, 1000);
@@ -163,7 +163,7 @@ app.showTime = function() {
     greeting.text("morning");
   } else {
     $('body').css("background", "linear-gradient(to bottom, #4CA1AF, #C4E0E5)");
-    greeting.text("evening");
+    greeting.text("morning");
   }
 };
 
