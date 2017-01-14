@@ -151,17 +151,19 @@ app.showTime = function() {
 
   $("#clock").text(time);
 
-  //Change background depending on time
-  if (h > 16 && h < 20) {
+  //Change background and greeting depending on time
+  if (h > 16 && h < 19) {
     $('body').css("background", "linear-gradient(to bottom, #0B486B, #F56217)");
     greeting.text("afternoon");
-  } else if (h >= 20 || h < 5) {
+  } else if (h >= 19 || h < 5) {
     $('body').css("background", "linear-gradient(to bottom, #141E30 , #243B55)");
     greeting.text("evening");
   } else if (h >= 5 && h < 8) {
     $('body').css("background", "linear-gradient(to bottom, #FF512F, #F09819)");
     greeting.text("morning");
-  } else {
+  } else if (h >= 12 && h < 17){
+		greeting.text("afternoon");
+	} else {
     $('body').css("background", "linear-gradient(to bottom, #4CA1AF, #C4E0E5)");
     greeting.text("morning");
   }
