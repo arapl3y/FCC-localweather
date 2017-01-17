@@ -109,12 +109,13 @@ app.render = function() {
   var currentTime = new Date().getTime() / 1000;
   var isDaytime = currentTime > w.sunrise && currentTime < w.sunset;
   var desc = w.description.toLowerCase();
+	console.log(desc);
 
   if (desc.indexOf("rain") >= 0) {
     app.skycons.set("weather-icon", Skycons.RAIN);
-  } else if (desc.indexOf("sunny") >= 0 && isDaytime) {
+  } else if (desc.indexOf("clear") >= 0 && isDaytime) {
     app.skycons.set("weather-icon", Skycons.CLEAR_DAY);
-  } else if (desc.indexOf("sunny") >= 0 && !isDaytime) {
+  } else if (desc.indexOf("clear") >= 0 && !isDaytime) {
     app.skycons.set("weather-icon", Skycons.CLEAR_NIGHT);
   } else if (desc.indexOf("cloud") >= 0 && isDaytime) {
     app.skycons.set("weather-icon", Skycons.PARTLY_CLOUDY_DAY);
