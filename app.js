@@ -31,30 +31,34 @@ app.initSkycons = function() {
   app.skycons.play();
 };
 
-//get weather at coordinates
+//get location at coordinates
 app.getLocation = function() {
-  //JSON call to get location (lat,lon)
-  //on success => app.getWeather(location)
+  //JSON call to get location (lat, lon) from geolocation, if there's an error
+  //the IP API is called instead to provide location information
+  //on success -> app.getWeather(location)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
       app.getWeather(lat, lon);
-
+    }, function(err){
+      errorCallBack();
     });
-  } else {
-    $.getJSON("https://ipapi.co/json/").then(function(location) {
-      var lat = location.latitude;
-      var lon = location.longitude;
-      app.getWeather(lat, lon);
 
-    }, function error(err) {
-      if (error.status.fail) {
-        alert(error.status.message);
-      }
-    });
+    errorCallBack = function() {
+      $.getJSON("https://ipapi.co/json/").then(function(location) {
+        var lat = location.latitude;
+        var lon = location.longitude;
+        app.getWeather(lat, lon);
+      }, function(err) {
+        if (error.status.fail) {
+          alert(error.status.message);
+        }
+      });
+    };
   }
 };
+
 
 //get weather at coordinates
 app.getWeather = function(lat, lon) {
@@ -109,7 +113,6 @@ app.render = function() {
   var currentTime = new Date().getTime() / 1000;
   var isDaytime = currentTime > w.sunrise && currentTime < w.sunset;
   var desc = w.description.toLowerCase();
-	console.log(desc);
 
   if (desc.indexOf("rain") >= 0) {
     app.skycons.set("weather-icon", Skycons.RAIN);
@@ -162,9 +165,9 @@ app.showTime = function() {
   } else if (h >= 5 && h < 8) {
     $('body').css("background", "linear-gradient(to bottom, #FF512F, #F09819)");
     greeting.text("morning");
-  } else if (h >= 12 && h < 17){
-		greeting.text("afternoon");
-	} else {
+  } else if (h >= 12 && h < 17) {
+    greeting.text("afternoon");
+  } else {
     $('body').css("background", "linear-gradient(to bottom, #4CA1AF, #C4E0E5)");
     greeting.text("morning");
   }
